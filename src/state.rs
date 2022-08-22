@@ -4,20 +4,20 @@
  */
 
 pub struct GameState {
-	answer: String,
-	guesses: Vec<String>,
+    answer: String,
+    guesses: Vec<String>,
 }
 
 pub struct State {
-	total_rounds: u32,
-	games: Vec<GameState>
+    total_rounds: u32,
+    games: Vec<GameState>,
 }
 
 impl State {
-	pub fn new() -> State {
-		State {
-			total_rounds: 0,
-			games: Vec::new(),
-		}
-	}
+    pub fn new() -> State {
+        State {
+            total_rounds: 0,
+            games: Vec::new(),
+        }
+    }
 }

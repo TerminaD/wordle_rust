@@ -1,7 +1,6 @@
 /** This file generates the command line interface
-  * and reads the configuration from the command line.
-  */
-
+ * and reads the configuration from the command line.
+ */
 use clap::Parser;
 
 #[derive(Parser)]
