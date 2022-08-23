@@ -1,23 +1,37 @@
-/** This file defines the structure of a state,
- * deals with its initialization
- * and menages it at the end of each turn.
- */
+enum letter_state {
 
-pub struct GameState {
-    answer: String,
-    guesses: Vec<String>,
 }
 
-pub struct State {
-    total_rounds: u32,
-    games: Vec<GameState>,
+struct attempt_state {
+
 }
 
-impl State {
-    pub fn new() -> State {
-        State {
-            total_rounds: 0,
-            games: Vec::new(),
-        }
-    }
+struct alphabet_state {
+
+}
+
+pub fn update() {
+	attempt_state_update();
+	alphabet_state_update();
+	stat_update();
+}
+
+pub fn update_new_round() {
+	
+}
+
+fn attempt_state_update() {
+
+}
+
+fn alphabet_state_update() {
+
+}
+
+fn stat_update() {
+
+}
+
+fn write_json_stat() {
+
 }

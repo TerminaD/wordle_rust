@@ -1,53 +1,47 @@
-pub mod cli_parse;
-pub mod initialize;
+pub mod init;
+pub mod logic;
+pub mod render;
 pub mod state;
-
-use cli_parse::parse_cli_input;
-
-enum LetterState {
-    Unknown, 
-    Excessive, // Note that a letter that isn't present in the answer also counts as excessive
-    Misplaced, 
-    Correct
-}
+pub mod tests;
 
 fn main() {
-    let mut loaded_config = parse_cli_input();
+    let mut loaded_config = init::load_config();
+    let (guess_list, answer_list) = init::read_lists_and_shuffle();
 
+    let mut answer: String = String::new();
+    let mut attempt: String = String::new();
+    loop {
+        logic::generate_answer(
+            &mut answer,
+            &loaded_config.random,
+            &loaded_config.day,
+            &answer_list,
+        );
+
+        loop {
+            loop {
+                // TODO: read attempt from stdin
+
+                if logic::check_valid(&attempt, &loaded_config.difficult, &answer_list) {
+                    break;
+                } else {
+                    print!("Invalid attempt. Please try again.")
+                }
+            }
+
+            state::update();
+
+            if logic::check_end() {
+                break;
+            } else {
+                render::render_attempt();
+            }
+        }
+
+        if render::render_end() {
+            break;
+        } else {
+            state::update_new_round();
+        }
+    }
 }
-
-fn set_answer(is_random: &bool, day: &Option<u16>, seed: &Option<u64>) -> String {
-    /** TODO:
-    * Randomly choose a word from vec of possible answers according to day and seed
-    * or load appointed answer
-    */
-}
-
-fn check_case(input: &String, answer: &String) -> [LetterState] {
-
-}
-
-fn print_welcome() {
-
-}
-
-fn print_case() {
-
-}
-
-fn print_endgame(print_statistic: &bool) {
-
-}
-
-fn valid_guess(input: &String, difficult: &bool) -> bool {
-
-}
-
-fn initialize_word_lists(guess_list: &Option<String>, answer_list: &Option<String>) {
-
-}
-
-fn write_round_to_json() {
-
-}
-
