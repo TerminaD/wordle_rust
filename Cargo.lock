@@ -342,5 +342,6 @@ dependencies = [
  "clap",
  "colored",
  "rand",
+ "serde",
  "serde_json",
 ]

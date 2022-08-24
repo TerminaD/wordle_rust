@@ -8,7 +8,7 @@ pub fn generate_answer(
 ) {
 }
 
-pub fn check_valid(
+pub fn check_valid_attempt(
 	attempt: &String, 
 	difficult: &bool, 
 	answer_list: &BTreeSet<String>
@@ -18,4 +18,8 @@ pub fn check_valid(
 
 pub fn check_end() -> bool {
 
+}
+
+mod tests {
+    
 }

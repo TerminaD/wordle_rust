@@ -1,8 +1,16 @@
+use std::io;
+
 pub mod init;
+pub mod internal_state;
+pub mod json_state;
 pub mod logic;
 pub mod render;
-pub mod state;
-pub mod tests;
+
+use internal_state as is;
+use json_state as js;
+
+use is::AlphabetState;
+use is::AttemptState;
 
 fn main() {
     let mut loaded_config = init::load_config();
@@ -10,6 +18,7 @@ fn main() {
 
     let mut answer: String = String::new();
     let mut attempt: String = String::new();
+
     loop {
         logic::generate_answer(
             &mut answer,
@@ -18,20 +27,31 @@ fn main() {
             &answer_list,
         );
 
+        let mut round_attempt = AttemptState.new();
+        let mut round_alphabet = AlphabetState.new();
+
+        if () {
+            js::update_from_json_stat();
+        }
+
         loop {
             loop {
-                // TODO: read attempt from stdin
+                io::stdin()
+                    .read_line(&mut attempt)
+                    .expect("Failed to read line");
 
-                if logic::check_valid(&attempt, &loaded_config.difficult, &answer_list) {
+                if logic::check_valid_attempt(&attempt, &loaded_config.difficult, &answer_list) {
                     break;
                 } else {
                     print!("Invalid attempt. Please try again.")
                 }
             }
 
-            state::update();
+            is::attempt_state_update();
+            is::alphabet_state_update();
 
             if logic::check_end() {
+                js::json_stat_append();
                 break;
             } else {
                 render::render_attempt();
@@ -41,7 +61,7 @@ fn main() {
         if render::render_end() {
             break;
         } else {
-            state::update_new_round();
+            is::update_new_round();
         }
     }
 }
