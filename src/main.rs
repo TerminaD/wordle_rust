@@ -16,7 +16,7 @@ fn main() {
     let mut loaded_config = init::load_config();
     let (guess_list, answer_list) = init::read_lists_and_shuffle();
 
-    let mut answer: String = String::new();
+    let mut answer: [char; 5];
     let mut attempt: String = String::new();
 
     loop {
@@ -47,7 +47,7 @@ fn main() {
                 }
             }
 
-            is::attempt_state_update();
+            round_attempt.push_attempt();
             is::alphabet_state_update();
 
             if logic::check_end() {
