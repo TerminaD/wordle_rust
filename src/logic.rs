@@ -6,6 +6,12 @@
 
 use std::io;
 
+pub enum GameState {
+    Going, 
+    Win, 
+    Lose
+}
+
 pub fn generate_answer(
     prev_answer: &mut String,
     random: &bool,
@@ -54,6 +60,6 @@ pub fn check_valid_attempt(
     }
 }
 
-pub fn check_end() -> bool {}
+pub fn check_end() -> GameState {}
 
 mod tests {}
