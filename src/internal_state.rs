@@ -1,3 +1,9 @@
+/** This file defines the structure of all guesses and the alphabet during each round
+ * and also updates them when needed.
+ * 
+ * TODO: alphabet, update_new_round, tests, debug
+ */
+
 use std::collections::HashMap;
 
 enum LetterColor {
@@ -81,7 +87,11 @@ fn is_in_answer(curr: &char, answer: &[char; 5]) -> bool {
 }
 
 pub struct AlphabetState {
+	letters: [Block; 26]
+}
 
+impl AlphabetState {
+	
 }
 
 pub fn update_new_round() {

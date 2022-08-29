@@ -3,6 +3,8 @@
  * reading the configuration,
  * reading the two lists of words,
  * and shuffling the answer list if -r flag is passed in.
+ * 
+ * TODO: Write tests & debug borrowing interface and file reading
  */
 use std::fs::File;
 use std::io::{self, BufRead};
@@ -140,5 +142,5 @@ fn read_lines(filename: &PathBuf) -> io::Result<io::Lines<io::BufReader<File>>> 
 }
 
 mod tests {
-    
+    // TODO
 }

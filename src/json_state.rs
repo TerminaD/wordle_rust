@@ -1,3 +1,8 @@
+/** This file deals with the state json file.
+ * 
+ * TODO: everything
+ */
+
 pub fn json_stat_append() {
 
 }

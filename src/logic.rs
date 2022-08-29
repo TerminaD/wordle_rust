@@ -1,3 +1,9 @@
+/** This file deals with logic involving
+ * answer generating, checking for an attempt's validity, and determining when the game ends.
+ * 
+ * TODO: check_end, tests, debug
+ */
+
 use std::io;
 
 pub fn generate_answer(
@@ -41,6 +47,7 @@ pub fn check_valid_attempt(
     guess_list: &Vec<String>
 ) -> bool {
     if difficult {
+        
         
     } else {
         return guess_list.contains(attempt);
