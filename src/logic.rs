@@ -1,7 +1,7 @@
 /** This file deals with logic involving
  * answer generating, checking for an attempt's validity, and determining when the game ends.
  * 
- * TODO: check_end, tests, debug
+ * TODO: check_end, tests, debug, check_valid when difficult
  */
 
 use std::io;
@@ -47,6 +47,19 @@ pub fn generate_answer(
     }
 }
 
+pub fn check_valid_entry(entry: &String, list: &Vec<String>) -> bool {
+    if entry.len() != 5 {
+        return false;
+    }
+    if !input.chars().all(char::is_ascii_uppercase(&self)) {
+        return false;
+    }
+    if !list.contains(&input) {
+        return false;
+    }
+    return true;
+}
+
 pub fn check_valid_attempt(
     attempt: &String, 
     difficult: &bool, 
@@ -60,6 +73,8 @@ pub fn check_valid_attempt(
     }
 }
 
-pub fn check_end() -> GameState {}
+pub fn check_end() -> GameState {
+
+}
 
 mod tests {}

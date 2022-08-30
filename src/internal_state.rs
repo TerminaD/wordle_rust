@@ -1,10 +1,13 @@
 /** This file defines the structure of all guesses and the alphabet during each round
  * and also updates them when needed.
  *
- * TODO: alphabet, update_new_round, tests, debug
+ * TODO: tests, debug
  */
 use std::collections::HashMap;
 
+use crate::init::ConfigFormat;
+
+#[derive(PartialEq, PartialOrd)]
 pub enum LetterColor {
     Green,
     Yellow,
@@ -38,14 +41,16 @@ pub struct AttemptState {
 
 impl AttemptState {
     pub fn new() {
-        AttemptState
+        AttemptState {
+            attempts: ()
+        }
     }
 
     pub fn len(&self) -> usize {
         self.attempts.len()
     }
 
-    pub fn push_attempt(&mut self, attempt: &String, answer: &[char; 5]) {
+    pub fn push_attempt(&mut self, attempt: &String, answer: &[char; 5]) -> [Block; 5] {
         let mut attempt_iter = attempt.chars();
         let mut new_attempt: [Block; 5];
         let mut answer_hashmap: HashMap<char, u8>;
@@ -80,6 +85,7 @@ impl AttemptState {
         }
 
         self.attempts.push(new_attempt);
+        return new_attempt;
     }
 }
 
@@ -93,13 +99,27 @@ fn is_in_answer(curr: &char, answer: &[char; 5]) -> bool {
 }
 
 pub struct AlphabetState {
-    letters: [Block; 26],
+    pub letters: [Block; 26],
 }
 
-impl AlphabetState {}
+impl AlphabetState {
+    pub fn update(&mut self, new_attempt: &[Block; 5]) {
+        let mut prev_color: &mut LetterColor;
+        let mut curr_color: &LetterColor;
+        for i in 0..5 {
+            let curr_index = (new_attempt[i].letter.to_digit(36).unwrap() - 10) as usize;
+            prev_color = &mut self.letters[curr_index].color;
+            curr_color = &new_attempt[i].color;
 
-pub fn update_new_round() {}
+            if prev_color > &mut curr_color {
+                prev_color = &mut curr_color;
+            }
+        }
+    }
+}
 
-pub fn alphabet_state_update() {}
+pub fn update_new_round(curr_config: &mut ConfigFormat) {
+    curr_config.day += 1;
+}
 
 mod tests {}

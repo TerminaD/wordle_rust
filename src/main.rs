@@ -49,8 +49,7 @@ fn main() {
                 }
             }
 
-            round_attempt.push_attempt();
-            is::alphabet_state_update();
+            round_alphabet.update(round_attempt.push_attempt());
 
             if logic::check_end() {
                 js::json_stat_append();

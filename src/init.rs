@@ -13,7 +13,7 @@ use std::path::Path;
 extern crate serde;
 
 use clap::Parser;
-use serde::de::DeserializeOwned;
+use serde::{Serialize, Deserialize};
 
 use std::error::Error;
 use std::fs::File;
@@ -61,6 +61,7 @@ pub struct ConfigFormat {
     pub state: Option<PathBuf>,
 }
 
+#[derive(Serialize, Deserialize)]
 struct JSONConfig {
     random: bool,
     difficult: bool,
