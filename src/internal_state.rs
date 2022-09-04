@@ -3,6 +3,7 @@
  *
  * TODO: tests, debug
  */
+
 use std::collections::HashMap;
 
 use crate::init::ConfigFormat;
@@ -121,5 +122,3 @@ impl AlphabetState {
 pub fn update_new_round(curr_config: &mut ConfigFormat) {
     curr_config.day += 1;
 }
-
-mod tests {}

@@ -1,11 +1,9 @@
 /** This file prints stuff to the command line
- *
- * TODO: debug, test
  */
 
 use colored::Colorize;
 
-use std::io;
+use std::{io, path::Path};
 
 use crate::{
     internal_state::{AttemptState, LetterColor, AlphabetState},
@@ -41,11 +39,10 @@ pub fn render_attempt(data: &AttemptState, alpha: &AlphabetState) {
             LetterColor::Red => println!("{} ", curr_block.letter.to_string().red()),
             LetterColor::Grey => println!("{} ",curr_block.letter.to_string().truecolor(50, 50, 50)),
         }
-    }
-        
-    }
+    }    
 }
-pub fn render_end(state: &GameState, data: &AttemptState, answer: &String, difficult: &bool) -> bool {
+
+pub fn render_end(state: &GameState, data: &AttemptState, answer: &String, stat: &Option<Path>) -> bool {
     clearscreen::clear().expect("Failed to clear terminal.");
 
     match state {
@@ -75,8 +72,11 @@ pub fn render_end(state: &GameState, data: &AttemptState, answer: &String, diffi
         print!("{}", "_ _ _ _ _");
     }
 
-    if difficult {
-        render_stats(calculate_stats());
+    match stat {
+        None => {}
+        Some(stat_path) => {
+            calculate_stats(stat_path);
+        }
     }
 
     print!("Press \"R\" to play another round, or press any other key to exit.");
@@ -87,15 +87,11 @@ pub fn render_end(state: &GameState, data: &AttemptState, answer: &String, diffi
         .read_line(&mut responce)
         .expect("Failed to read responce");
 
-	match responce {
-		"r" => return true,
-		responce.len() > 1 => panic("You've put in more than one letter!"),
-		_ => return false,
-	}
+    if responce == "r" {
+        return true;
+    }
+    if responce.len() > 1 {
+        panic!("You've put in more than one letter!");
+    }
+    return false;
 }
-
-fn render_stats() {
-
-}
-
-mod tests {}

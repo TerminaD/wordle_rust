@@ -3,32 +3,27 @@
  * reading the configuration,
  * reading the two lists of words,
  * and shuffling the answer list if -r flag is passed in.
- * 
+ *
  * TODO: Write tests & debug borrowing interface and file reading
  */
-use std::fs::File;
-use std::io::{self, BufRead};
-use std::path::Path;
 
 extern crate serde;
 
+use rand::rngs::StdRng;
+use rand::seq::SliceRandom;
 use clap::Parser;
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 
-use std::error::Error;
 use std::fs::File;
-use std::io;
+use std::io::{self, BufRead};
 use std::path::Path;
-
-use std::collections::BTreeSet;
-use std::path::{Path, PathBuf};
+use std::error::Error;
 
 #[derive(Parser)]
 #[clap(name = "Wordle_Rust")]
 #[clap(author = "termina <termina.y.email@gmail.com>")]
 #[clap(version = "1.0")]
 #[clap(about = "A game of Wordle, written in Rust!", long_about = None)]
-
 pub struct ConfigFormat {
     #[clap(short, long, action)]
     pub random: bool,
@@ -81,7 +76,7 @@ pub fn load_config() -> ConfigFormat {
     // Reads from JSON if -c is given.
     match loaded_config.config {
         Some(config_file_path) => {
-            read_json_config::<JSONConfig, PathBuf>(config_file_path).unwrap();
+            read_json_config(config_file_path).unwrap();
         }
         None => {}
     }
@@ -95,10 +90,12 @@ pub fn load_config() -> ConfigFormat {
 }
 
 // Read guess and answer lists, whether default or custom.
-// Passes ownership of the two list BTreeSets to the main function.
+// Passes ownership of the two Vecs to the main function.
 pub fn read_lists_and_shuffle(
-    guess_list_path: &Option<PathBuf>,
-    answer_list_path: &Option<PathBuf>,
+    guess_list_path: Option<Path>,
+    answer_list_path: Option<Path>,
+    random: &bool,
+    seed: &Option<u64>,
 ) -> (Vec<String>, Vec<String>) {
     let mut guess_list: Vec<String> = Vec::new();
     let mut answer_list: Vec<String> = Vec::new();
@@ -113,11 +110,42 @@ pub fn read_lists_and_shuffle(
                 }
             }
         }
-        Some(custom_path) {
-
+        Some(custom_path) => {
+            if let Ok(lines) = read_lines(custom_path) {
+                for line in lines {
+                    if let Ok(word) = line {
+                        guess_list.push(word);
+                    }
+                }
+            }
         }
     }
 
+    match answer_list_path {
+        None => {
+            if let Ok(lines) = read_lines("./assets/default_answer_list") {
+                for line in lines {
+                    if let Ok(word) = line {
+                        answer_list.push(word);
+                    }
+                }
+            }
+        }
+        Some(custom_path) => {
+            if let Ok(lines) = read_lines(custom_path) {
+                for line in lines {
+                    if let Ok(word) = line {
+                        answer_list.push(word);
+                    }
+                }
+            }
+        }
+    }
+
+    if random {
+        let mut seeded_rng = StdRng::from_seed(&seed.unwrap());
+        answer_list.shuffle(&mut seeded_rng);
+    }
 
     (guess_list, answer_list)
 }
@@ -137,11 +165,10 @@ where
     Ok(c)
 }
 
-fn read_lines(filename: &PathBuf) -> io::Result<io::Lines<io::BufReader<File>>> {
+fn read_lines<P>(filename: P) -> io::Result<io::Lines<io::BufReader<File>>>
+where
+    P: AsRef<Path>,
+{
     let file = File::open(filename)?;
     Ok(io::BufReader::new(file).lines())
-}
-
-mod tests {
-    // TODO
 }
